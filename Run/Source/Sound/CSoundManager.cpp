@@ -148,6 +148,5 @@ void CSoundManager::SetVolume(std::string list, int volume)
 //Ä¶’†‚©.
 bool CSoundManager::Playing(std::string list)
 {
-	//...
 	return GetInstance()->m_pDxSound[list]->Playing();
 }
