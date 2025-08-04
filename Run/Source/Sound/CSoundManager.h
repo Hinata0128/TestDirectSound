@@ -3,6 +3,10 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <dsound.h>
+
+#pragma once(lib, "dsound.lib")	//音楽の再生で必要になる.
+#pragma comment(lib, "dxguid.lib") 
 
 /**************************************************
 *	サウンドマネージャークラス.

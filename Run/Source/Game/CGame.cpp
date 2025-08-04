@@ -33,7 +33,7 @@ void CGame::Create()
 HRESULT CGame::LoadData()
 {
 	//サウンドデータの読み込み
-	if (CSoundManager::GetInstance()->Load(m_hWnd) == false) {
+	if (CSoundManager::GetInstance()->LoadSound(m_hWnd) == false) {
 		return E_FAIL;
 	}
 

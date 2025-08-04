@@ -10,11 +10,14 @@ CTitle::CTitle(CDirectX11* pDx11)
 	, m_isTransitioning			()
 	, m_transitionDelayTimer	()
 {
-	
+	CSoundManager::Play("Title", true);
+
 }
 
 CTitle::~CTitle()
 {
+	//‚±‚ê‚Å‰¹Šy‚Ì’âŽ~‚É‚È‚é.
+	CSoundManager::StopAll();
 }
 
 void CTitle::Initialize()

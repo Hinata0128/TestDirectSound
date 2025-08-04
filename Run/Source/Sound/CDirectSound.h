@@ -1,59 +1,59 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
-#include <dsound.h>	//DirectSoundÀ‘•—pƒwƒbƒ_[ƒtƒ@ƒCƒ‹.
-#pragma once(lib, "dsound.lib")	//‰¹Šy‚ÌÄ¶‚Å•K—v‚É‚È‚é.
-
+#include <dsound.h>  // DirectSoundå®Ÿè£…ç”¨ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«.
+#pragma comment(lib, "dsound.lib")    // âœ… æ­£ã—ããƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ãƒªãƒ³ã‚¯ã™ã‚‹
+#pragma comment(lib, "dxguid.lib")    // âœ… GUIDç”¨ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚‚å¿…è¦
 /*******************************************
-* DirectSoundƒNƒ‰ƒX.
+* DirectSoundã‚¯ãƒ©ã‚¹.
 **/
 
 class CDirectSound final
 {
 public:
 	//---------------------
-	//‰¹ŠyÀ‘•‚É•K—v‚È\‘¢‘Ì.
+	//éŸ³æ¥½å®Ÿè£…ã«å¿…è¦ãªæ§‹é€ ä½“.
 	//---------------------
 
-	//wave‚Å‚Ì‰¹Šyæ“¾\‘¢‘Ì.
+	//waveã§ã®éŸ³æ¥½å–å¾—æ§‹é€ ä½“.
 	struct MusicWaveStructureData
 	{
-		//wave‚Å‚Ì‰¹ŠyÀ‘•‚Ì‚½‚ß‚É•K—v‚È•Ï”.llll
-		//DirectSound‚ğg—p‚·‚é‚Ì‚É•K—v.
-		WAVEFORMATEX	WaveFormat;		//ƒtƒH[ƒ}ƒbƒg
-		char*			SoundBuffer;	//‘‚«‚İƒoƒbƒtƒ@
-		DWORD			Size;			//ƒoƒbƒtƒ@ƒTƒCƒY
+		//waveã§ã®éŸ³æ¥½å®Ÿè£…ã®ãŸã‚ã«å¿…è¦ãªå¤‰æ•°.llll
+		//DirectSoundã‚’ä½¿ç”¨ã™ã‚‹ã®ã«å¿…è¦.
+		WAVEFORMATEX	WaveFormat;		//ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+		char*			SoundBuffer;	//æ›¸ãè¾¼ã¿ãƒãƒƒãƒ•ã‚¡
+		DWORD			Size;			//ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º
 	};
 
 public:
 	CDirectSound();
 	~CDirectSound();
 
-	//‰Šú‰».
+	//åˆæœŸåŒ–.
 	bool Init(const LPDIRECTSOUND8& DirectSound, std::wstring filePath);
 
-	//‰ğ•úŠÖ”.
+	//è§£æ”¾é–¢æ•°.
 	void Relese();
 
-	//‰¹ºƒf[ƒ^‚Ì“Ç‚İ‚İ.
+	//éŸ³å£°ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿.
 	bool LoadSound(std::wstring filename);
 
-	//Ä¶.
+	//å†ç”Ÿ.
 	void Play(bool LoopSound);
 
-	//’â~.
+	//åœæ­¢.
 	void Stop();
 
-	//‰¹‚ğÅ‰‚Éİ’è‚·‚éŠÖ”.
+	//éŸ³ã‚’æœ€åˆã«è¨­å®šã™ã‚‹é–¢æ•°.
 	void FirstSound();
 
-	//‰¹‚Ì‰¹—Ê•ÏX—pŠÖ”.
+	//éŸ³ã®éŸ³é‡å¤‰æ›´ç”¨é–¢æ•°.
 	void SetVolume(int volume);
 
-	//Ä¶’†.
+	//å†ç”Ÿä¸­.
 	bool Playing();
 
 private:
-	//“Ç‚İ‚ŞWaveƒtƒ@ƒCƒ‹.
+	//èª­ã¿è¾¼ã‚€Waveãƒ•ã‚¡ã‚¤ãƒ«.
 	bool LoadWaveFile(std::wstring FileName, MusicWaveStructureData* OutWaveData);
 private:
 	LPDIRECTSOUND8		m_lpSoundInterface;
