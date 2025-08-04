@@ -17,7 +17,7 @@ public:
 	//waveでの音楽取得構造体.
 	struct MusicWaveStructureData
 	{
-		//waveでの音楽実装のために必要な変数.
+		//waveでの音楽実装のために必要な変数.llll
 		//DirectSoundを使用するのに必要.
 		WAVEFORMATEX	WaveFormat;		//フォーマット
 		char*			SoundBuffer;	//書き込みバッファ
