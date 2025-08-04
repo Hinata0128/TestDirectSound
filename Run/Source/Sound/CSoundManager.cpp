@@ -107,4 +107,5 @@ bool CSoundManager::LoadSound(HWND hWnd)
 		_ASSERT_EXPR(false, WStr.c_str());
 		return false;
 	}
+	return true;
 }
