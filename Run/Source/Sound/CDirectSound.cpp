@@ -107,6 +107,7 @@ bool CDirectSound::LoadSound(std::wstring filename)
 
 void CDirectSound::Play(bool LoopSound)
 {
+	//バッファがNULLの時returnを返す.
 	if (m_lpSoundBuffer == NULL)
 	{
 		return;
@@ -122,6 +123,7 @@ void CDirectSound::Play(bool LoopSound)
 
 void CDirectSound::Stop()
 {
+	//バッファがNULLの時returnを返す.
 	if (m_lpSoundBuffer == NULL)
 	{
 		return;
@@ -143,6 +145,7 @@ void CDirectSound::FirstSound()
 
 void CDirectSound::SetVolume(int volume)
 {
+	//バッファがNULLの時returnを返す.
 	if (m_lpSoundBuffer == NULL)
 	{
 		return;
