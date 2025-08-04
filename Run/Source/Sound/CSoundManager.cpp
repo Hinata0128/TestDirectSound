@@ -109,3 +109,44 @@ bool CSoundManager::LoadSound(HWND hWnd)
 	}
 	return true;
 }
+
+//サウンドリストを取得.
+std::vector<std::string> CSoundManager::GetSoundList()
+{
+	return GetInstance()->m_SoundList;
+}
+
+//音再生.
+void CSoundManager::Play(std::string list, bool LoopSound)
+{
+	GetInstance()->m_pDxSound[list]->Play(LoopSound);
+}
+
+//音の停止.
+void CSoundManager::Stop(std::string list)
+{
+	GetInstance()->m_pDxSound[list]->Stop();
+}
+
+//全ての音の停止.
+void CSoundManager::StopAll()
+{
+	CSoundManager* pI = GetInstance();
+
+	for (const auto& sound : pI->m_pDxSound)
+	{
+		sound.second->Stop();
+	}
+}
+
+//音量調整.
+void CSoundManager::SetVolume(std::string list, int volume)
+{
+	GetInstance()->m_pDxSound[list]->SetVolume(volume);
+}
+
+//再生中か.
+bool CSoundManager::Playing(std::string list)
+{
+	return GetInstance()->m_pDxSound[list]->Playing();
+}
