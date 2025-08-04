@@ -1,49 +1,50 @@
 #pragma once
+#include "Sound/CDirectSound.h"
+#include <vector>
+#include <string>
+#include <unordered_map>
 
 /**************************************************
 *	サウンドマネージャークラス.
-*	Manager(マネージャー)：管理者.
-*		Singleton(シングルトン：デザインパターンの１つ)で作成.
 **/
 class CSoundManager
 {
 public:
-	//サウンドリスト列挙型.
-	enum enList
-	{
-		//音が増えたら「ここ」に追加してください.
-		max,		//最大数.
-	};
 
-public:
-	//インスタンス取得(唯一のアクセス経路).
-	//※関数の前にstaticを付けることでインスタンス生成しなくても使用できる.
 	static CSoundManager* GetInstance()
 	{
-		//唯一のインスタンスを作成する.
-		//※staticで作成されたので2回目以降は、下の1行は無視される.
-		static CSoundManager s_Instance;	//s_:staticの意味.
+		static CSoundManager s_Instance;
 		return &s_Instance;
 	}
 
+	//音声データの読み込み.
+	static bool LoadSound(HWND hWnd);
 
-	~CSoundManager();
+	//サウンドリストを取得.
+	static std::vector<std::string> GetSoundList();
 
-	//サウンドデータ読込関数.
-	bool Load( HWND hWnd );
-	//サウンドデータ解放関数.
-	void Release();
-
-
-private://外部からアクセス不可能.
-	//外部からコンストラクタへのアクセスを禁止する.
-	CSoundManager();
-	//コピーコンストラクタによるコピーを禁止する.
-	//「=delete」で関数の定義を削除できる.
-	CSoundManager( const CSoundManager& rhs ) = delete;
-	//代入演算子によるコピーを禁止する.
-	//operator(オペレータ):演算子のオーバーロードで、演算の中身を拡張できる.
-	CSoundManager& operator = ( const CSoundManager& rhs ) = delete;
+	//音の再生.
+	static void Play(std::string list, bool LoopSound = false);
+	//音の停止.
+	static void Stop(std::string list);
+	//全ての音を停止.
+	static void StopAll();
+	//音量調整.
+	static void SetVolume(std::string list, int volume);
+	//再生中か.
+	static bool Playing(std::string list);
 
 private:
+	//コンストラクタ・デストラクタはprivateに入れておく(シングルトン)にしているから.
+	CSoundManager();
+	~CSoundManager();
+	CSoundManager(const CSoundManager& rhs)					= delete;
+	CSoundManager& operator = (const CSoundManager& rhs)	= delete;
+
+private:
+	LPDIRECTSOUND8 m_lpSoundInterface;
+	//DirectSound.
+	std::unordered_map<std::string, CDirectSound*> m_pDxSound;
+	//サウンドリスト.
+	std::vector<std::string> m_SoundList;
 };
