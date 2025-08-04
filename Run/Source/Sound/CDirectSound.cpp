@@ -100,8 +100,7 @@ bool CDirectSound::LoadSound(std::wstring filename)
 		&buffer,		//アンロックするバッファパート1.
 		buffer_size,	//パート1のバッファサイズ.
 		NULL,			//アンロックするバッファパート2
-		NULL);			//
-	
+		NULL);			//パート2のバッファサイズ.	
 
 	return false;
 }
@@ -113,12 +112,12 @@ void CDirectSound::Play(bool LoopSound)
 		return;
 	}
 
+	//trueなら1・falseなら0.
 	int LoopBit = LoopSound == true ? 1 : 0;
 
 	//再生位置を最初に戻して再生.
 	FirstSound();
 	m_lpSoundBuffer->Play(0, 0, DSBPLAY_LOOPING & LoopBit);
-
 }
 
 void CDirectSound::Stop()
@@ -128,9 +127,8 @@ void CDirectSound::Stop()
 		return;
 	}
 
-	// 停止.
+	//停止.
 	m_lpSoundBuffer->Stop();
-
 }
 
 void CDirectSound::FirstSound()
@@ -139,9 +137,8 @@ void CDirectSound::FirstSound()
 	{
 		return;
 	}
-	// 再生位置を最初に戻す.
+	//再生位置を最初に戻す.
 	m_lpSoundBuffer->SetCurrentPosition(0);
-
 }
 
 void CDirectSound::SetVolume(int volume)
@@ -151,23 +148,24 @@ void CDirectSound::SetVolume(int volume)
 		return;
 	}
 
-	// DirectSoundのVolumeが-10000～0なので
-	// 0～10000にする.
+	//DirectSoundのVolumeが-10000～0なので
+	//0～10000にする.
+	//0を最小に設定する.
+	//10000を最大に設定する.
 	int Tmp_Volume = volume - 10000;
 
-	// 音量を調整する.
+	//音量を調整する.
 	m_lpSoundBuffer->SetVolume(Tmp_Volume);
-
 }
 
 bool CDirectSound::Playing()
 {
 	DWORD status = 0;
 
-	// バッファの状態をビットで取得.
+	//バッファの状態をビットで取得.
 	m_lpSoundBuffer->GetStatus(&status);
 
-	// & = ビット論理積　取得した status に DSBSTATUS_PLAYING のビットが立っているかチェック.
+	//& = ビット論理積　取得した status に DSBSTATUS_PLAYING のビットが立っているかチェック.
 	if (status & DSBSTATUS_PLAYING) {
 		return true;
 	}
@@ -177,18 +175,18 @@ bool CDirectSound::Playing()
 
 bool CDirectSound::LoadWaveFile(std::wstring FileName, MusicWaveStructureData* OutWaveData)
 {
-	// WindowsマルチメディアAPIのハンドル.
+	//WindowsマルチメディアAPIのハンドル.
 	HMMIO mmioHandle = NULL;
 
-	// チャンク情報.
+	//チャンク情報.
 	MMCKINFO ck_info;
-	// RIFFチャンク用.
+	//RIFFチャンク用.
 	MMCKINFO riffck_info;
 
-	// WAVファイル内音サンプルサイズ.
+	//WAVファイル内音サンプルサイズ.
 	DWORD dwWavSize = 0;
 
-	// WAVファイルを開く.
+	//WAVファイルを開く.
 	mmioHandle = mmioOpen(
 		(LPWSTR)FileName.c_str(),   // ファイル名.
 		NULL,                       // MMIO情報.
@@ -200,11 +198,11 @@ bool CDirectSound::LoadWaveFile(std::wstring FileName, MusicWaveStructureData* O
 		return false;
 	}
 
-	// RIFFチャンクに侵入するためにffcTypeにWAVEを設定する.
+	//RIFFチャンクに侵入するためにffcTypeにWAVEを設定する.
 	riffck_info.fccType = mmioFOURCC('W', 'A', 'V', 'E');
 
 
-	// RIFFチャンクに侵入する.
+	//RIFFチャンクに侵入する.
 	if (MMSYSERR_NOERROR != mmioDescend(
 		mmioHandle,     // MMIOハンドル.
 		&riffck_info,   // 取得したチャンクの情報.
@@ -216,16 +214,16 @@ bool CDirectSound::LoadWaveFile(std::wstring FileName, MusicWaveStructureData* O
 		return false;
 	}
 
-	// 侵入先のチャンクを"fmt"として設定する.
+	//侵入先のチャンクを"fmt"として設定する.
 	ck_info.ckid = mmioFOURCC('f', 'm', 't', ' ');
 	if (MMSYSERR_NOERROR != mmioDescend(mmioHandle, &ck_info, &riffck_info, MMIO_FINDCHUNK))
 	{
-		// fmtチャンクがない.
+		//fmtチャンクがない.
 		mmioClose(mmioHandle, MMIO_FHOPEN);
 		return false;
 	}
 
-	// fmtチャンクの読み込み.
+	//fmtチャンクの読み込み.
 	LONG ReadSize = mmioRead(
 		mmioHandle,
 		(HPSTR)&OutWaveData->WaveFormat,
@@ -238,7 +236,7 @@ bool CDirectSound::LoadWaveFile(std::wstring FileName, MusicWaveStructureData* O
 		return false;
 	}
 
-	// フォーマットチェック.
+	//フォーマットチェック.
 	if (OutWaveData->WaveFormat.wFormatTag != WAVE_FORMAT_PCM)
 	{
 		// フォーマットエラー.
@@ -253,19 +251,19 @@ bool CDirectSound::LoadWaveFile(std::wstring FileName, MusicWaveStructureData* O
 		return false;
 	}
 
-	// dataチャンクに進入する.
+	//dataチャンクに侵入する.
 	ck_info.ckid = mmioFOURCC('d', 'a', 't', 'a');
 	if (mmioDescend(mmioHandle, &ck_info, &riffck_info, MMIO_FINDCHUNK) != MMSYSERR_NOERROR)
 	{
-		// 進入失敗.
+		//侵入失敗.
 		mmioClose(mmioHandle, MMIO_FHOPEN);
 		return false;
 	}
 
-	// サイズを保存.
+	//サイズを保存.
 	OutWaveData->Size = ck_info.cksize;
 
-	// dataチャンク読み込み.
+	//dataチャンク読み込み.
 	OutWaveData->SoundBuffer = new char[ck_info.cksize];
 	ReadSize = mmioRead(mmioHandle, (HPSTR)OutWaveData->SoundBuffer, ck_info.cksize);
 	if (ReadSize != ck_info.cksize)
@@ -275,7 +273,7 @@ bool CDirectSound::LoadWaveFile(std::wstring FileName, MusicWaveStructureData* O
 		return false;
 	}
 
-	// ファイルを閉じる.
+	//ファイルを閉じる.
 	mmioClose(mmioHandle, MMIO_FHOPEN);
 
 	return true;
