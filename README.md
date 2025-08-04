@@ -1,2 +1,2 @@
 DirectSoundの呼び方コンストラクタにパスを呼ぶもしくは、自分のマネージャークラスみたいにそこにBGM関係を書く.
-DirctSoundを実装するときにinclude <string>クラスを作成しよう.
+DirctSoundを実装するときにinclude stringクラスを作成しよう.
